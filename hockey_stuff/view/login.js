@@ -28,20 +28,20 @@ export default class Login extends React.Component {
     }
 
     handleSubmit() {
-        db.ref('/login').once('value').then((response)=>{
-        	this.loginPiece(Object.keys(response.toJSON()), this.state.login, this.state.password)
-        })
-    }
+        db.ref('/login').orderByChild("username").equalTo(this.state.login).once('value').then((response) => {
+            loginfo = response.toJSON()
+            if (loginfo !== null) {
+                userID = Object.keys(loginfo)
+                if (loginfo[userID[0]].password === this.state.password) {
+                    this.props.navigation.navigate('Dashboard', { login: this.state.login });
+                } else {
+                    Alert.alert("Username or Password is Wrong")
+                }
+            } else {
+                Alert.alert("Username or Password is Wrong")
+            }
 
-    loginPiece(resulter, login, password) {
-    	for(stuff in resulter){
-    		db.ref('/login/' + resulter[stuff]).once('value').then((response)=>{
-    			loginfo = response.toJSON();
-    			if(loginfo['username'] === login && loginfo['password'] === password){
-    				this.props.navigation.navigate('Dashboard', {login: this.state.login});
-    			}
-    		})
-    	}
+        })
     }
 
     render() {

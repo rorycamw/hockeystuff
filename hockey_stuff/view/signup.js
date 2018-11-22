@@ -30,7 +30,8 @@ export default class SignUp extends React.Component {
 	handleSubmit(){
 		db.ref('/login').push({
     username: this.state.login,
-    password: this.state.password
+    password: this.state.password,
+    favteams: ["Colorado Avalanche"]
   });
   this.props.navigation.navigate('Dashboard', {login: this.state.login});
 	}

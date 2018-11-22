@@ -5,6 +5,7 @@ import { createStackNavigator, createAppContainer } from 'react-navigation';
 import Login from './view/login.js'
 import SignUp from './view/signup.js'
 import Dashboard from './view/dashboard.js'
+import FavouriteTeams from './view/favouriteteams.js'
 
 const RootStack = createStackNavigator(
   {
@@ -16,6 +17,9 @@ const RootStack = createStackNavigator(
     },
     Dashboard: {
       screen: Dashboard
+    },
+    FavTeams: {
+      screen: FavouriteTeams
     }
   },
   {

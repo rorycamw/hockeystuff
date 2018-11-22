@@ -1,48 +1,65 @@
 import React, { Component } from 'react';
-import { StyleSheet, TextInput, TouchableHighlight, Text, View, Alert } from 'react-native';
+import { StyleSheet, TextInput, TouchableHighlight, ListView, Text, View, Alert } from 'react-native';
+import { db } from '../service/db.js';
 
-export default class Dashboard extends React.Component {
+export default class FavouriteTeams extends React.Component {
     static navigationOptions = ({ navigation }) => {
         return {
-            headerTitle: "My Dashboard",
-            headerLeft: null,
-            headerStyle: {backgroundColor: 'gray'},
-            headerTitleStyle: {textAlign: 'center'}
+            headerTitle: "My Favourite Teams",
+            headerStyle: { backgroundColor: 'gray' },
+            headerTitleStyle: { textAlign: 'center' }
         };
     }
 
     constructor(props) {
         super(props);
+        const ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+        })
         this.state = {
             name: '',
-            error: false
+            favTeams: [],
+            error: false,
+            todoDataSource: ds
         }
-        this.handleChange = this.handleChange.bind(this);
 
     }
-    handleChange(e) {
-        console.log("this happened");
+    renderRow(task, sectionID, rowID, hightlightRow) {
+        return (
+            <Text style={styles.title}>{task}</Text>
+        )
     }
-
     componentDidMount() {
-        console.log(this.props.navigation.getParam('login', ''));
         var username = this.props.navigation.getParam('login', '')
         this.setState({
             name: username
         })
+        db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
+            loginfo = response.toJSON()
+            if (loginfo !== null) {
+                userID = Object.keys(loginfo)
+                favteam = loginfo[userID[0]].favteams
+                if (favteam !== null) {
+                    this.setState({
+                        todoDataSource: this.state.todoDataSource.cloneWithRows(favteam)
+                    })
+                }
+            }
+
+        })
     }
+
     render() {
         return (
             <View style={styles.main}>
         <TouchableHighlight style={styles.button}>
-        <Text style={styles.title}>Scores & Standings</Text>
+        <Text style={styles.title}>Add New Favourite Teams</Text>
         </TouchableHighlight>
-        <TouchableHighlight style={styles.button}>
-        <Text style={styles.title}>Upcoming Games</Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('FavTeams', {login: this.props.navigation.getParam('login', '')})}}>
-        <Text style={styles.title} >My Favourite Teams</Text>
-        </TouchableHighlight>
+        <ListView 
+            dataSource = {this.state.todoDataSource}
+            renderRow = {this.renderRow}
+            />
+        
       </View>
         );
     }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Text, Image, View, ListView, StyleSheet, TouchableHighlight, Modal } from 'react-native';
 
-export default class GalleryComponent extends Component {
+export default class UpcomingComponent extends Component {
 
 	constructor() {
 		super();
@@ -12,11 +12,15 @@ export default class GalleryComponent extends Component {
 		this.state = {
 			todoDataSource: ds,
 			currentDate: this.getDate(),
-			favTeams: ['VAN', 'FLA', 'VGK'],
+			favTeams: this.getFavTeams(),
 		}
 
 		this.pressRow = this.pressRow.bind(this);
 		this.renderRow = this.renderRow.bind(this);
+	}
+
+	getFavTeams() {
+		return(['VAN', 'FLA', 'VGK']);
 	}
 
 	getDate() {
@@ -61,8 +65,28 @@ export default class GalleryComponent extends Component {
 		fetch('http://live.nhl.com/GameData/SeasonSchedule-20182019.json')
 			.then((response) => response.json())
 			.then((response) => {
+				var newArr = [];
+				var teamCount = {
+
+				}
+				for (f in this.getFavTeams()) {
+					teamCount[this.getFavTeams()[f]] = 0;
+				}
+				for (i in response) {
+					var gameDate = response[i].est.split(' ');
+					if (parseInt(gameDate[0]) >= parseInt(this.getDate())) {
+						for (t in this.getFavTeams()) {
+							if (((response[i].a == this.getFavTeams()[t]) || (response[i].h == this.getFavTeams()[t])) && (teamCount[this.getFavTeams()[t]] < 3)) {
+								newArr.push(response[i]);
+								teamCount[this.getFavTeams()[t]]++;
+							}
+						}
+					}
+				}
+				console.log(teamCount);
+				//console.log(newArr);
 				this.setState({
-					todoDataSource: this.state.todoDataSource.cloneWithRows(response)
+					todoDataSource: this.state.todoDataSource.cloneWithRows(newArr)
 				});
 			})
 	}
@@ -76,7 +100,6 @@ export default class GalleryComponent extends Component {
 	}
 
 	renderRow(response, sectionID, rowID, highlightRow) {
-		console.log(response);
 		return(
 			<View>
 				<View style={styles.row}>
@@ -88,11 +111,16 @@ export default class GalleryComponent extends Component {
 
 	render() {
 		return(
-			<ListView
-			dataSource = {this.state.todoDataSource}
-			renderRow={this.renderRow}
-			style={{width: '100%'}}
-			/>
+			<View>
+				<View>
+					<Text>Upcoming Games</Text>
+				</View>
+				<ListView
+				dataSource = {this.state.todoDataSource}
+				renderRow={this.renderRow}
+				style={{width: '100%'}}
+				/>
+			</View>
 		)
 	}
 }

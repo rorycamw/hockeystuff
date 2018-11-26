@@ -61,11 +61,69 @@ export default class UpcomingComponent extends Component {
 		return(dateParts);
 	}
 
+	convertDate(date) {
+		date = date.split(' ');
+		date = date[0];
+		var day = date[6]+date[7];
+		var year = date[0]+date[1]+date[2]+date[3];
+		var month = (parseInt(date[4]) * 10) + parseInt(date[5]);
+		switch(month) {
+			case 1:
+				month = 'January';
+	        	break;
+			case 2:
+				month = 'Feb';
+	        	break;
+			case 3:
+				month = 'Mar';
+	        	break;
+			case 4:
+				month = 'Apr';
+	        	break;
+			case 5:
+				month = 'May';
+	        	break;
+			case 9:
+				month = 'Sep';
+	        	break;
+			case 10:
+				month = 'Oct';
+	        	break;
+			case 11:
+				month = 'Nov';
+	        	break;
+			case 12:
+				month = 'Dec';
+	        	break;
+	        default:
+	        	month = 'June';
+	        	Alert.alert("Invalid Month");
+	    }
+		return(month + ' ' + day + ', ' + year);
+	}
+
+	convertTime(time) {
+		time = time.split(' ');
+		time = time[1];
+		time = time.split(':');
+		var minute = time[1];
+		var hour = parseInt(time[0]) - 3;
+		if (hour > 12) {
+			hour -= 12;
+			hour += " PM";
+		}
+		else {
+			hour += " AM";
+		}
+		hour.split(' ');
+		return((parseInt(hour[0]) + 3) + ':' + minute + hour[1] + ' EST / ' + hour[0] + ':' + minute + hour[1] + ' PST');
+	}
+
 	fetchTodos() {
 		fetch('http://live.nhl.com/GameData/SeasonSchedule-20182019.json')
 			.then((response) => response.json())
 			.then((response) => {
-				var newArr = [];
+				var gamesSortedByDate = [];
 				var teamCount = {
 
 				}
@@ -77,16 +135,16 @@ export default class UpcomingComponent extends Component {
 					if (parseInt(gameDate[0]) >= parseInt(this.getDate())) {
 						for (t in this.getFavTeams()) {
 							if (((response[i].a == this.getFavTeams()[t]) || (response[i].h == this.getFavTeams()[t])) && (teamCount[this.getFavTeams()[t]] < 3)) {
-								newArr.push(response[i]);
+								gamesSortedByDate.push(response[i]);
 								teamCount[this.getFavTeams()[t]]++;
 							}
 						}
 					}
 				}
 				console.log(teamCount);
-				//console.log(newArr);
+				//console.log(gamesSortedByDate);
 				this.setState({
-					todoDataSource: this.state.todoDataSource.cloneWithRows(newArr)
+					todoDataSource: this.state.todoDataSource.cloneWithRows(gamesSortedByDate)
 				});
 			})
 	}
@@ -103,7 +161,9 @@ export default class UpcomingComponent extends Component {
 		return(
 			<View>
 				<View style={styles.row}>
-					<Text>{JSON.stringify(response)}</Text>
+					<Text style={{color: 'white', fontSize: 16,}}>{this.convertDate(response.est)}{"\n"}
+					{this.convertTime(response.est)}{"\n"}
+					{(response.a)} at {(response.h)}</Text>
 				</View>
 			</View>
 		)
@@ -111,9 +171,9 @@ export default class UpcomingComponent extends Component {
 
 	render() {
 		return(
-			<View>
-				<View>
-					<Text>Upcoming Games</Text>
+			<View style={{height: '100%'}}>
+				<View style={styles.header}>
+					<Text style={styles.heading}>Upcoming Games</Text>
 				</View>
 				<ListView
 				dataSource = {this.state.todoDataSource}
@@ -131,5 +191,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
     marginBottom: 5,
+    backgroundColor: 'black',
+  },
+
+  header: {
+  	width: '100%',
+  	backgroundColor: 'black',
+  	alignItems: 'center',
+  	paddingTop: 20,
+  	paddingBottom: 20,
+  	marginBottom: 5,
+  },
+
+  heading: {
+  	color: 'white',
+  	fontSize: 64,
   },
 });

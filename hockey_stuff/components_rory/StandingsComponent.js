@@ -55,7 +55,7 @@ export default class StandingsComponent extends Component {
 		return(
 			<View>
 				<View>
-					<Text>Upcoming Games</Text>
+					<Text>Standings</Text>
 				</View>
 				<ListView
 				dataSource = {this.state.todoDataSource}

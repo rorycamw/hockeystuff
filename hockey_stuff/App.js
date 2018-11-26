@@ -20,6 +20,12 @@ const RootStack = createStackNavigator(
     },
     FavTeams: {
       screen: FavouriteTeams
+    },
+    UpcomingGames:{
+      //TODO: Put in upcoming games screen
+    },
+    Standings:{
+      //TODO: Put in standings.
     }
   },
   {

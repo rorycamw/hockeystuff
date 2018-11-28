@@ -11,7 +11,6 @@ export default class StandingsComponent extends Component {
 		})
 		this.state = {
 			todoDataSource: ds,
-			currentDate: this.getDate(),
 			favTeams: this.getFavTeams(),
 		}
 
@@ -20,15 +19,35 @@ export default class StandingsComponent extends Component {
 	}
 
 	getFavTeams() {
-		return(['VAN', 'FLA', 'VGK']);
+		return(['Vancouver Canucks', 'Florida Panthers', 'Vegas Golden Knights']);
+	}
+
+	highlight(currentTeam) {
+		var style = "";
+		for (t in this.getFavTeams()) {
+			if (t == currentTeam) {
+				style = "rowSpecial";
+			}
+			else {
+				style = "row";
+			}
+		}
+		return(style);
 	}
 
 	fetchTodos() {
-		fetch('http://live.nhl.com/GameData/SeasonSchedule-20182019.json')
+		fetch('https://statsapi.web.nhl.com/api/v1/standings?season=20182019')
 			.then((response) => response.json())
 			.then((response) => {
+				var teamStats = [];
+				for (i in response.records) {
+					for (j in response.records[i].teamRecords) {
+						teamStats.push(response.records[i].teamRecords[j]);
+					}
+					//teamStats.push(response.records[i].teamRecords);
+				}
 				this.setState({
-					todoDataSource: this.state.todoDataSource.cloneWithRows(response)
+					todoDataSource: this.state.todoDataSource.cloneWithRows(teamStats)
 				});
 			})
 	}
@@ -45,7 +64,18 @@ export default class StandingsComponent extends Component {
 		return(
 			<View>
 				<View style={styles.row}>
-					<Text>{JSON.stringify(response)}</Text>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>{JSON.stringify(response.team.name)}</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>{JSON.stringify(response.leagueRank)}</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>{JSON.stringify(response.leagueRecord)}</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>Points: {JSON.stringify(response.points)}</Text>
+					</View>
 				</View>
 			</View>
 		)
@@ -53,9 +83,9 @@ export default class StandingsComponent extends Component {
 
 	render() {
 		return(
-			<View>
-				<View>
-					<Text>Standings</Text>
+			<View style={{height: '100%'}}>
+				<View style={styles.header}>
+					<Text style={styles.heading}>Standings</Text>
 				</View>
 				<ListView
 				dataSource = {this.state.todoDataSource}
@@ -73,5 +103,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
     marginBottom: 5,
+    marginLeft: 2.5,
+    marginRight: 2.5,
+    backgroundColor: 'black',
+  },
+
+  rowSpecial: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 16,
+    marginBottom: 5,
+    marginLeft: 2.5,
+    marginRight: 2.5,
+    backgroundColor: 'yellow',
+  },
+
+  column: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    padding: 16,
+    marginBottom: 5,
+    marginLeft: 2.5,
+    marginRight: 2.5,
+    backgroundColor: 'black',
+  },
+
+  header: {
+  	width: '100%',
+  	backgroundColor: 'black',
+  	alignItems: 'center',
+  	paddingTop: 20,
+  	paddingBottom: 20,
+  	marginBottom: 5,
+  },
+
+  heading: {
+  	color: 'white',
+  	fontSize: 64,
   },
 });

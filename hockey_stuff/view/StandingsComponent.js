@@ -23,16 +23,14 @@ export default class StandingsComponent extends Component {
 	}
 
 	highlight(currentTeam) {
-		var style = "";
+		var fav = false;
 		for (t in this.getFavTeams()) {
-			if (t == currentTeam) {
-				style = "rowSpecial";
-			}
-			else {
-				style = "row";
+			if (this.getFavTeams()[t] == currentTeam) {
+				fav = true;
+				break;
 			}
 		}
-		return(style);
+		return(fav);
 	}
 
 	fetchTodos() {
@@ -63,18 +61,24 @@ export default class StandingsComponent extends Component {
 	renderRow(response, sectionID, rowID, highlightRow) {
 		return(
 			<View>
-				<View style={styles.row}>
+				<View style={[(this.highlight(response.team.name)) ? styles.rowSpecial : styles.row]}>
 					<View style={styles.column}>
-						<Text style={{color: 'white', fontSize: 16,}}>{JSON.stringify(response.team.name)}</Text>
+						<Text style={{color: 'white', fontSize: 16,}}>{(response.team.name)}</Text>
 					</View>
 					<View style={styles.column}>
-						<Text style={{color: 'white', fontSize: 16,}}>{JSON.stringify(response.leagueRank)}</Text>
+						<Text style={{color: 'white', fontSize: 16,}}>{(response.leagueRank)}</Text>
 					</View>
 					<View style={styles.column}>
-						<Text style={{color: 'white', fontSize: 16,}}>{JSON.stringify(response.leagueRecord)}</Text>
+						<Text style={{color: 'white', fontSize: 16,}}>{(response.leagueRecord.wins)}</Text>
 					</View>
 					<View style={styles.column}>
-						<Text style={{color: 'white', fontSize: 16,}}>Points: {JSON.stringify(response.points)}</Text>
+						<Text style={{color: 'white', fontSize: 16,}}>{(response.leagueRecord.losses)}</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>{(response.leagueRecord.ot)}</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>{(response.points)}</Text>
 					</View>
 				</View>
 			</View>
@@ -86,6 +90,26 @@ export default class StandingsComponent extends Component {
 			<View style={{height: '100%'}}>
 				<View style={styles.header}>
 					<Text style={styles.heading}>Standings</Text>
+				</View>
+				<View style={styles.row}>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>TEAM</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>RANK</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>WINS</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>LOSSES</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>OT LOSSES</Text>
+					</View>
+					<View style={styles.column}>
+						<Text style={{color: 'white', fontSize: 16,}}>POINTS</Text>
+					</View>
 				</View>
 				<ListView
 				dataSource = {this.state.todoDataSource}

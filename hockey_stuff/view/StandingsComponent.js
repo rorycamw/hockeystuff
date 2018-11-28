@@ -19,6 +19,7 @@ export default class StandingsComponent extends Component {
 	}
 
 	getFavTeams() {
+		//Change to database
 		return(['Vancouver Canucks', 'Florida Panthers', 'Vegas Golden Knights']);
 	}
 

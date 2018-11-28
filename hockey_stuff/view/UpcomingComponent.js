@@ -20,6 +20,7 @@ export default class UpcomingComponent extends Component {
 	}
 
 	getFavTeams() {
+		// Change to database favourite
 		return(['VAN', 'FLA', 'VGK']);
 	}
 

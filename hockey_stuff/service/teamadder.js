@@ -1,4 +1,4 @@
-import Firebase from 'firebase';
+const firebase = require('firebase')
 
 let config = {
     apiKey: "AIzaSyCY0wJFPefiqTXN1mBo8gVtWjjFEKWXIGM",
@@ -9,5 +9,14 @@ let config = {
     messagingSenderId: "732255209350"
   };
 
-let app = Firebase.initializeApp(config);
-export const db = app.database();
+var app = firebase.initializeApp(config)
+var db = app.database()
+
+args = process.argv
+
+console.log(args[2]+','+args[3]);
+
+db.ref('/teams').push({
+	teamtag: args[2],
+	teamname: args[3]
+})

@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-import Login from './view/login.js'
-import SignUp from './view/signup.js'
-import Dashboard from './view/dashboard.js'
-import FavouriteTeams from './view/favouriteteams.js'
+import Login from './view/login.js';
+import SignUp from './view/signup.js';
+import Dashboard from './view/dashboard.js';
+import FavouriteTeams from './view/favouriteteams.js';
+import StandingsComponent from './view/StandingsComponent.js';
+import UpcomingComponent from './view/UpcomingComponent.js';
 
 const RootStack = createStackNavigator(
   {
@@ -22,10 +24,10 @@ const RootStack = createStackNavigator(
       screen: FavouriteTeams
     },
     UpcomingGames:{
-      //TODO: Put in upcoming games screen
+      screen: UpcomingComponent
     },
     Standings:{
-      //TODO: Put in standings.
+      screen: StandingsComponent
     }
   },
   {

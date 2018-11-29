@@ -14,28 +14,34 @@ export default class UpcomingComponent extends Component {
 			name: '',
 			todoDataSource: ds,
 			currentDate: this.getDate(),
-			favTeams: this.getFavTeams(),
+			favTeamTags: []
 		}
 
 		this.pressRow = this.pressRow.bind(this);
 		this.renderRow = this.renderRow.bind(this);
+        this.getFavTeams = this.getFavTeams.bind(this);
 	}
 
 	getFavTeams() {
-		var username = this.props.navigation.getParam('login', '')
-		db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
-			loginfo = response.toJSON();
-	            if (loginfo !== null) {
-	                userID = Object.keys(loginfo);
-	                favteam = loginfo[userID[0]].favteam;
-	                favteamTags = [];
-	                for(team in favteam){
-	                    favteamTags.push(favteam[team].teamtag);
-	                }
-	                return(favteamTags);
-	            }
-	        })
-        
+		return new Promise((resolve, reject) => {
+            try {
+                var username = this.props.navigation.getParam('login', '')
+                db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
+                    loginfo = response.toJSON();
+                    if (loginfo !== null) {
+                        userID = Object.keys(loginfo);
+                        favteam = loginfo[userID[0]].favteam;
+                        favteamTags = [];
+                        for (team in favteam) {
+                            favteamTags.push(favteam[team].teamtag);
+                        }
+                        resolve(favteamTags)
+                    }
+                })
+            } catch (err) {
+                reject("Error in database")
+            }
+        })
 		//return(['VAN', 'FLA', 'VGK']);
 	}
 
@@ -143,17 +149,15 @@ export default class UpcomingComponent extends Component {
 				var teamCount = {
 
 				}
-				for (f in this.getFavTeams()) {
-					teamCount[this.getFavTeams()[f]] = 0;
+				for (f in this.state.favTeamTags) {
+					teamCount[this.state.favTeamTags[f]] = 0;
 				}
 				for (i in response) {
 					var gameDate = response[i].est.split(' ');
 					if (parseInt(gameDate[0]) >= parseInt(this.getDate())) {
-						for (t in this.getFavTeams()) {
-							if (((response[i].a == this.getFavTeams()[t]) || (response[i].h == this.getFavTeams()[t])) && (teamCount[this.getFavTeams()[t]] < 3)) {
-								gamesSortedByDate.push(response[i]);
-								teamCount[this.getFavTeams()[t]]++;
-							}
+						if (((this.state.favTeamTags[t].includes(response[i].a)) || (this.state.favTeamTags[t].includes(response[i].h)) && (teamCount[this.state.favTeamTags[t]] < 3)) {
+							gamesSortedByDate.push(response[i]);
+							teamCount[this.state.favTeamTags[t]]++;
 						}
 					}
 				}
@@ -169,6 +173,11 @@ export default class UpcomingComponent extends Component {
         var username = this.props.navigation.getParam('login', '')
         this.setState({
             name: username
+        })
+        this.getFavTeams().then((response)=>{
+            this.setState({
+                favTeamTags: response
+            })
         })
     }
 

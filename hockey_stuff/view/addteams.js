@@ -45,30 +45,31 @@ export default class AddTeams extends React.Component {
         )
     }
     handleSearch() {
-        db.ref.('/login').orderByChild("username").equalTo(this.state.name).once('value').then((response) = {
-            loginfo = response.toJSON()
-            if (loginfo !== null) {
-                userID = Object.keys(loginfo)
-                favteam = loginfo[userID[0]].favteam
-                teams = []
-                for (team in favteam) {
-                    teams.push(favteam[team])
-                }
-                db.ref('/teams').orderByChild("teamname").once('value').then((response) => {
-                    resp = response.toJSON()
-                    searchHit = []
-                    for (res in resp) {
-                        if(resp[res].teamname.includes(this.state.search)){
-                            resp[res].user = this.state.name
-                            searchHit.push(resp[res])
-                        }
-                    }
-                    this.setState({
-                        todoDataSource: this.state.todoDataSource.cloneWithRows(searchHit)
-                    })
+        // db.ref.('/login').orderByChild("username").equalTo(this.state.name).once('value').then((response) => {
+        //     loginfo = response.toJSON()
+        //     if (loginfo !== null) {
+        //         userID = Object.keys(loginfo)
+        //         favteam = loginfo[userID[0]].favteam
+        //         teams = []
+        //         for (team in favteam) {
+        //             teams.push(favteam[team])
+        //         }
 
-                })
+        //     }
+        // })
+        db.ref('/teams').orderByChild("teamname").once('value').then((response) => {
+            resp = response.toJSON()
+            searchHit = []
+            for (res in resp) {
+                if (resp[res].teamname.includes(this.state.search)) {
+                    resp[res].user = this.state.name
+                    searchHit.push(resp[res])
+                }
             }
+            this.setState({
+                todoDataSource: this.state.todoDataSource.cloneWithRows(searchHit)
+            })
+
         })
     }
     // addTeam(){
@@ -86,7 +87,7 @@ export default class AddTeams extends React.Component {
             name: username
         })
     }
-    
+
     render() {
         return (
             <View style={styles.main}>

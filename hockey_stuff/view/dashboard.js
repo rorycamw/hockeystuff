@@ -34,10 +34,10 @@ export default class Dashboard extends React.Component {
     render() {
         return (
             <View style={styles.main}>
-        <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('FavTeams', {login: this.props.navigation.getParam('login', '')})}}>
+        <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('Standings', {login: this.props.navigation.getParam('login', '')})}}>
         <Text style={styles.title}>Current Standings</Text>
         </TouchableHighlight>
-        <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('FavTeams', {login: this.props.navigation.getParam('login', '')})}}>
+        <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('UpcomingGames', {login: this.props.navigation.getParam('login', '')})}}>
         <Text style={styles.title}>Upcoming Games</Text>
         </TouchableHighlight>
         <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('FavTeams', {login: this.props.navigation.getParam('login', '')})}}>

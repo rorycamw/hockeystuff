@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Text, Image, View, ListView, StyleSheet, TouchableHighlight, Modal } from 'react-native';
+import { db } from '../service/db.js';
 
 export default class UpcomingComponent extends Component {
 
-	constructor() {
-		super();
+	constructor(props) {
+		super(props);
 		const ds = new ListView.DataSource({
 			rowHasChanged: (r1, r2) => r1 !== r2
 		})
@@ -21,18 +22,20 @@ export default class UpcomingComponent extends Component {
 	}
 
 	getFavTeams() {
+		var username = this.props.navigation.getParam('login', '')
 		db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
-		loginfo = response.toJSON();
-            if (loginfo !== null) {
-                userID = Object.keys(loginfo);
-                favteam = loginfo[userID[0]].favteam;
-                favteamTags = [];
-                for(team in favteam){
-                    favteamTags.push(favteam[team].teamtag);
-                }
-            }
-        })
-        return(favteamTags);
+			loginfo = response.toJSON();
+	            if (loginfo !== null) {
+	                userID = Object.keys(loginfo);
+	                favteam = loginfo[userID[0]].favteam;
+	                favteamTags = [];
+	                for(team in favteam){
+	                    favteamTags.push(favteam[team].teamtag);
+	                }
+	                return(favteamTags);
+	            }
+	        })
+        
 		//return(['VAN', 'FLA', 'VGK']);
 	}
 

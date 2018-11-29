@@ -82,10 +82,12 @@ export default class StandingsComponent extends Component {
     }
 
     renderRow(response, sectionID, rowID, highlightRow) {
-        console.log(this.state.favTeams);
+        console.log(response.team.name, this.state.favTeams);
+        tepid = this.state.favTeams.includes(response.team.name)
+        console.log(tepid);
         return (
             <View>
-                <View style={[this.state.favTeams.includes(response.team.name) ? styles.rowSpecial : styles.row]}>
+                <View style={[tepid ? styles.rowSpecial : styles.row]}>
                     <View style={styles.column}>
                         <Text style={{color: 'white', fontSize: 16,}}>{(response.team.name)}</Text>
                     </View>

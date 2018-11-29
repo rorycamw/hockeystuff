@@ -25,7 +25,7 @@ export default class AddTeams extends React.Component {
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         // this.addTeam = this.addTeam.bind(this);
-        
+
     }
     renderRow(task, sectionID, rowID, hightlightRow) {
         return (
@@ -33,12 +33,11 @@ export default class AddTeams extends React.Component {
                 db.ref('/login').orderByChild("username").equalTo(task.user).once('value').then((response)=>{
                     resp = response.toJSON();
                     userID = Object.keys(resp)
-                    console.log(userID[0]);
+
                     db.ref('/login/' + userID[0] + '/favteam').push({
                         teamname: task.teamname,
                         teamtag: task.teamtag
                     })
-
                 })
             }}>
             <Text style={styles.title}>{task.teamtag}||{task.teamname}</Text>
@@ -46,19 +45,30 @@ export default class AddTeams extends React.Component {
         )
     }
     handleSearch() {
-        db.ref('/teams').orderByChild("teamname").once('value').then((response) => {
-            resp = response.toJSON()
-            searchHit = []
-            for (res in resp) {
-                if(resp[res].teamname.includes(this.state.search)){
-                    resp[res].user = this.state.name
-                    searchHit.push(resp[res])
+        db.ref.('/login').orderByChild("username").equalTo(this.state.name).once('value').then((response) = {
+            loginfo = response.toJSON()
+            if (loginfo !== null) {
+                userID = Object.keys(loginfo)
+                favteam = loginfo[userID[0]].favteam
+                teams = []
+                for (team in favteam) {
+                    teams.push(favteam[team])
                 }
-            }
-            this.setState({
-                todoDataSource: this.state.todoDataSource.cloneWithRows(searchHit)
-            })
+                db.ref('/teams').orderByChild("teamname").once('value').then((response) => {
+                    resp = response.toJSON()
+                    searchHit = []
+                    for (res in resp) {
+                        if(resp[res].teamname.includes(this.state.search)){
+                            resp[res].user = this.state.name
+                            searchHit.push(resp[res])
+                        }
+                    }
+                    this.setState({
+                        todoDataSource: this.state.todoDataSource.cloneWithRows(searchHit)
+                    })
 
+                })
+            }
         })
     }
     // addTeam(){

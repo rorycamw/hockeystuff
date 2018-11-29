@@ -12,13 +12,13 @@ export default class StandingsComponent extends Component {
         })
         this.state = {
             name: '',
-            todoDataSource: ds
+            todoDataSource: ds,
+            favTeams: []
         }
 
         this.pressRow = this.pressRow.bind(this);
         this.renderRow = this.renderRow.bind(this);
         this.getFavTeams = this.getFavTeams.bind(this);
-        this.highlight = this.highlight.bind(this)
     }
 
     getFavTeams() {
@@ -44,19 +44,6 @@ export default class StandingsComponent extends Component {
         //return(['Vancouver Canucks', 'Florida Panthers', 'Vegas Golden Knights']);
     }
 
-    highlight(currentTeam) {
-        this.getFavTeams().then((response) => {
-            counter = response.length
-            for (i = 0; i < response.length; i++) {
-                if (currentTeam == response[i]) {
-                    return true
-                    break;
-                }
-            }
-        });
-
-    }
-
     fetchTodos() {
         fetch('https://statsapi.web.nhl.com/api/v1/standings?season=20182019')
             .then((response) => response.json())
@@ -79,6 +66,11 @@ export default class StandingsComponent extends Component {
         this.setState({
             name: username
         })
+        this.getFavTeams().then((response)=>{
+            this.setState({
+                favTeams: response
+            })
+        })
     }
 
     componentDidMount() {
@@ -90,10 +82,10 @@ export default class StandingsComponent extends Component {
     }
 
     renderRow(response, sectionID, rowID, highlightRow) {
+        console.log(this.state.favTeams);
         return (
             <View>
-            
-                <View style={[(this.highlight(response.team.name)) ? styles.rowSpecial : styles.row]}>
+                <View style={[this.state.favTeams.includes(response.team.name) ? styles.rowSpecial : styles.row]}>
                     <View style={styles.column}>
                         <Text style={{color: 'white', fontSize: 16,}}>{(response.team.name)}</Text>
                     </View>
@@ -113,7 +105,6 @@ export default class StandingsComponent extends Component {
                         <Text style={{color: 'white', fontSize: 16,}}>{(response.points)}</Text>
                     </View>
                 </View>
-
             </View>
         )
     }

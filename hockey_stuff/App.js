@@ -8,6 +8,7 @@ import Dashboard from './view/dashboard.js';
 import FavouriteTeams from './view/favouriteteams.js';
 import StandingsComponent from './view/StandingsComponent.js';
 import UpcomingComponent from './view/UpcomingComponent.js';
+import AddTeams from './view/addteams.js'
 
 const RootStack = createStackNavigator(
   {
@@ -28,6 +29,9 @@ const RootStack = createStackNavigator(
     },
     Standings:{
       screen: StandingsComponent
+    },
+    AddTeam:{
+      screen: AddTeams
     }
   },
   {

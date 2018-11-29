@@ -10,6 +10,7 @@ export default class UpcomingComponent extends Component {
 			rowHasChanged: (r1, r2) => r1 !== r2
 		})
 		this.state = {
+			name: '',
 			todoDataSource: ds,
 			currentDate: this.getDate(),
 			favTeams: this.getFavTeams(),

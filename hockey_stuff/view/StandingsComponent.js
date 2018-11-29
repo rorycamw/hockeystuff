@@ -10,6 +10,7 @@ export default class StandingsComponent extends Component {
 			rowHasChanged: (r1, r2) => r1 !== r2
 		})
 		this.state = {
+			name: '',
 			todoDataSource: ds,
 			favTeams: this.getFavTeams(),
 		}
@@ -19,7 +20,22 @@ export default class StandingsComponent extends Component {
 	}
 
 	getFavTeams() {
-		//Change to database
+		// var username = this.props.navigation.getParam('login', '')
+  //       db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
+  //           loginfo = response.toJSON()
+  //           if (loginfo !== null) {
+  //               userID = Object.keys(loginfo)
+  //               favteam = loginfo[userID[0]].favteams
+  //               var teamnames = []
+  //               if (favteam !== null) {
+  //                   for(team in favteam){
+  //                   	teamnames.push(team['teamname'])
+  //                   }
+  //               }
+  //               return (teamnames)
+  //           }
+
+  //       })
 		return(['Vancouver Canucks', 'Florida Panthers', 'Vegas Golden Knights']);
 	}
 

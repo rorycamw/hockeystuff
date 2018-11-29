@@ -26,7 +26,7 @@ export default class FavouriteTeams extends React.Component {
     }
     renderRow(task, sectionID, rowID, hightlightRow) {
         return (
-            <Text style={styles.title}>{task}</Text>
+            <Text style={styles.title}>{task.teamtag}||{task.teamname}</Text>
         )
     }
     componentDidMount() {
@@ -34,25 +34,34 @@ export default class FavouriteTeams extends React.Component {
         this.setState({
             name: username
         })
+//--------------------Need to copy----------------------------------------------------------------------------
         db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
             loginfo = response.toJSON()
             if (loginfo !== null) {
                 userID = Object.keys(loginfo)
-                favteam = loginfo[userID[0]].favteams
+                favteam = loginfo[userID[0]].favteam
+                //change to teamname or teamtag whichever
+                teams = []
+                for(team in favteam){
+                    //change to favteam[team] to favteam[team].whatever (teamtag, teamname)
+                    teams.push(favteam[team])
+                }
+                //erase this part
                 if (favteam !== null) {
                     this.setState({
-                        todoDataSource: this.state.todoDataSource.cloneWithRows(favteam)
+                        todoDataSource: this.state.todoDataSource.cloneWithRows(teams)
                     })
                 }
             }
 
         })
+//---------------------End to copy----------------------------------------------------------------------------
     }
 
     render() {
         return (
             <View style={styles.main}>
-        <TouchableHighlight style={styles.button}>
+        <TouchableHighlight style={styles.button} onPress={()=>this.props.navigation.navigate('AddTeam',{login: this.props.navigation.getParam('login', '')})}>
         <Text style={styles.title}>Add New Favourite Teams</Text>
         </TouchableHighlight>
         <ListView 

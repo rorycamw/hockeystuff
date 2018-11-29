@@ -21,8 +21,19 @@ export default class UpcomingComponent extends Component {
 	}
 
 	getFavTeams() {
-		// Change to database favourite
-		return(['VAN', 'FLA', 'VGK']);
+		db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
+		loginfo = response.toJSON();
+            if (loginfo !== null) {
+                userID = Object.keys(loginfo);
+                favteam = loginfo[userID[0]].favteam;
+                favteamTags = [];
+                for(team in favteam){
+                    favteamTags.push(favteam[team].teamtag);
+                }
+            }
+        })
+        return(favteamTags);
+		//return(['VAN', 'FLA', 'VGK']);
 	}
 
 	getDate() {
@@ -150,6 +161,13 @@ export default class UpcomingComponent extends Component {
 				});
 			})
 	}
+
+	componentWillMount() {
+        var username = this.props.navigation.getParam('login', '')
+        this.setState({
+            name: username
+        })
+    }
 
 	componentDidMount() {
 		this.fetchTodos();

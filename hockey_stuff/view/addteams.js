@@ -69,14 +69,14 @@ export default class AddTeams extends React.Component {
             search: e.nativeEvent.text
         })
     }
-    //--------------------Need to copy----------------------------------------------------------------------------
+
     componentWillMount() {
         var username = this.props.navigation.getParam('login', '')
         this.setState({
             name: username
         })
     }
-    //---------------------End to copy----------------------------------------------------------------------------
+    
     render() {
         return (
             <View style={styles.main}>

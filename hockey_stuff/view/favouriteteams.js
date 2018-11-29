@@ -34,7 +34,7 @@ export default class FavouriteTeams extends React.Component {
         this.setState({
             name: username
         })
-//--------------------Need to copy----------------------------------------------------------------------------
+
         db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
             loginfo = response.toJSON()
             if (loginfo !== null) {
@@ -55,7 +55,7 @@ export default class FavouriteTeams extends React.Component {
             }
 
         })
-//---------------------End to copy----------------------------------------------------------------------------
+        
     }
 
     render() {

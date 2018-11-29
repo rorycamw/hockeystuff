@@ -20,23 +20,19 @@ export default class StandingsComponent extends Component {
 	}
 
 	getFavTeams() {
-		// var username = this.props.navigation.getParam('login', '')
-  //       db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
-  //           loginfo = response.toJSON()
-  //           if (loginfo !== null) {
-  //               userID = Object.keys(loginfo)
-  //               favteam = loginfo[userID[0]].favteams
-  //               var teamnames = []
-  //               if (favteam !== null) {
-  //                   for(team in favteam){
-  //                   	teamnames.push(team['teamname'])
-  //                   }
-  //               }
-  //               return (teamnames)
-  //           }
-
-  //       })
-		return(['Vancouver Canucks', 'Florida Panthers', 'Vegas Golden Knights']);
+		db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
+		loginfo = response.toJSON();
+            if (loginfo !== null) {
+                userID = Object.keys(loginfo);
+                favteam = loginfo[userID[0]].favteam;
+                favteamNames = [];
+                for(team in favteam){
+                    favteamNames.push(favteam[team].teamname);
+                }
+            }
+        })
+        return(favteamNames);
+		//return(['Vancouver Canucks', 'Florida Panthers', 'Vegas Golden Knights']);
 	}
 
 	highlight(currentTeam) {
@@ -66,6 +62,13 @@ export default class StandingsComponent extends Component {
 				});
 			})
 	}
+
+	componentWillMount() {
+        var username = this.props.navigation.getParam('login', '')
+        this.setState({
+            name: username
+        })
+    }
 
 	componentDidMount() {
 		this.fetchTodos();

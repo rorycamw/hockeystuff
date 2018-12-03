@@ -154,8 +154,10 @@ export default class UpcomingComponent extends Component {
                     if (parseInt(gameDate[0]) >= parseInt(this.getDate())) {
                     	for (t in this.state.favTeamTags) {
 	                        if (((this.state.favTeamTags.includes(response[i].a)) || (this.state.favTeamTags.includes(response[i].h))) && (teamCount[this.state.favTeamTags[t]] < 3)) {
-	                            gamesSortedByDate.push(response[i]);
-	                            teamCount[this.state.favTeamTags[t]]++;
+                                if (!gamesSortedByDate.includes(response[i])) {
+                                    gamesSortedByDate.push(response[i]);
+                                    teamCount[this.state.favTeamTags[t]]++;
+                                }  
 	                        }
 	                    }
 	                }

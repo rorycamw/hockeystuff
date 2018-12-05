@@ -20,12 +20,13 @@ export default class AddTeams extends React.Component {
             name: '',
             search: '',
             error: false,
-            todoDataSource: ds
+            todoDataSource: ds,
+            favTeams: []
         }
         this.handleSearchChange = this.handleSearchChange.bind(this);
         this.handleSearch = this.handleSearch.bind(this);
         // this.addTeam = this.addTeam.bind(this);
-
+        this.getFavTeams = this.getFavTeams.bind(this);
     }
     renderRow(task, sectionID, rowID, hightlightRow) {
         return (
@@ -37,6 +38,8 @@ export default class AddTeams extends React.Component {
                     db.ref('/login/' + userID[0] + '/favteam').push({
                         teamname: task.teamname,
                         teamtag: task.teamtag
+                    }).then(()=>{
+                        task.nav.navigate('Dashboard', { login: task.user })
                     })
                 })
             }}>
@@ -44,25 +47,36 @@ export default class AddTeams extends React.Component {
             </TouchableHighlight>
         )
     }
-    handleSearch() {
-        // db.ref.('/login').orderByChild("username").equalTo(this.state.name).once('value').then((response) => {
-        //     loginfo = response.toJSON()
-        //     if (loginfo !== null) {
-        //         userID = Object.keys(loginfo)
-        //         favteam = loginfo[userID[0]].favteam
-        //         teams = []
-        //         for (team in favteam) {
-        //             teams.push(favteam[team])
-        //         }
+    getFavTeams() {
+        return new Promise((resolve, reject) => {
+            try {
+                var username = this.props.navigation.getParam('login', '')
+                db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
+                    loginfo = response.toJSON();
+                    if (loginfo !== null) {
+                        userID = Object.keys(loginfo);
+                        favteam = loginfo[userID[0]].favteam;
+                        favteams = [];
+                        for (team in favteam) {
+                            favteams.push(favteam[team].teamname);
+                        }
+                        resolve(favteams)
+                    }
+                })
+            } catch (err) {
+                reject("Error in database")
+            }
+        })
+    }
 
-        //     }
-        // })
+    handleSearch() {
         db.ref('/teams').orderByChild("teamname").once('value').then((response) => {
             resp = response.toJSON()
             searchHit = []
             for (res in resp) {
-                if (resp[res].teamname.includes(this.state.search)) {
+                if (resp[res].teamname.includes(this.state.search) && !this.state.favTeams.includes(resp[res].teamname)) {
                     resp[res].user = this.state.name
+                    resp[res].nav = this.props.navigation
                     searchHit.push(resp[res])
                 }
             }
@@ -72,9 +86,7 @@ export default class AddTeams extends React.Component {
 
         })
     }
-    // addTeam(){
-    //     console.log("This ran");
-    // }
+
     handleSearchChange(e) {
         this.setState({
             search: e.nativeEvent.text
@@ -85,6 +97,11 @@ export default class AddTeams extends React.Component {
         var username = this.props.navigation.getParam('login', '')
         this.setState({
             name: username
+        })
+        this.getFavTeams().then((response) => {
+            this.setState({
+                favTeams: response
+            })
         })
     }
 

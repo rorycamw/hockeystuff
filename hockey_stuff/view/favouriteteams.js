@@ -29,12 +29,11 @@ export default class FavouriteTeams extends React.Component {
             <Text style={styles.title}>{task.teamtag}||{task.teamname}</Text>
         )
     }
-    componentDidMount() {
+    componentWillMount() {
         var username = this.props.navigation.getParam('login', '')
         this.setState({
             name: username
         })
-
         db.ref('/login').orderByChild("username").equalTo(username).once('value').then((response) => {
             loginfo = response.toJSON()
             if (loginfo !== null) {

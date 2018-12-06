@@ -3,6 +3,14 @@ import { StyleSheet, TextInput, TouchableHighlight, Text, View, Alert } from 're
 import { db } from '../service/db.js'
 
 export default class Login extends React.Component {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: "MyNHL Login",
+            headerStyle: { backgroundColor: 'gray' },
+            headerTitleStyle: { textAlign: 'center' }
+        };
+    }
+
     constructor() {
         super();
         this.state = {
@@ -47,7 +55,7 @@ export default class Login extends React.Component {
     render() {
         return (
             <View style={styles.main}>
-        <Text style={styles.title}>Some Title</Text>
+        <Text style={styles.title}>Welcome</Text>
         <Text style={styles.title}>Username</Text>
         <TextInput style={styles.itemInput} onChange={this.handleLoginChange}/>
         <Text style={styles.title}>Password</Text>

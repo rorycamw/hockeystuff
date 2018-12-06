@@ -26,7 +26,7 @@ export default class FavouriteTeams extends React.Component {
     }
     renderRow(task, sectionID, rowID, hightlightRow) {
         return (
-            <Text style={styles.title}>{task.teamtag}||{task.teamname}</Text>
+            <Text style={styles.title}>{task.teamtag} || {task.teamname}</Text>
         )
     }
     componentWillMount() {

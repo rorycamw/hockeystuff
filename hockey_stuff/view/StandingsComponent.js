@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, Image, View, ListView, StyleSheet, TouchableHighlight, Modal } from 'react-native';
+import { Text, Image, View, ListView, ScrollView, StyleSheet, TouchableHighlight, Modal } from 'react-native';
 import { db } from '../service/db.js';
 
 export default class StandingsComponent extends Component {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: "Standings",
+            headerStyle: { backgroundColor: 'gray' },
+            headerTitleStyle: { textAlign: 'center' }
+        };
+    }
 
     constructor(props) {
         super(props);
@@ -88,11 +95,8 @@ export default class StandingsComponent extends Component {
         return (
             <View>
                 <View style={[tepid ? styles.rowSpecial : styles.row]}>
-                    <View style={styles.column}>
+                    <View style={styles.nameColumn}>
                         <Text style={{color: 'white', fontSize: 16,}}>{(response.team.name)}</Text>
-                    </View>
-                    <View style={styles.column}>
-                        <Text style={{color: 'white', fontSize: 16,}}>{(response.leagueRank)}</Text>
                     </View>
                     <View style={styles.column}>
                         <Text style={{color: 'white', fontSize: 16,}}>{(response.leagueRecord.wins)}</Text>
@@ -113,36 +117,29 @@ export default class StandingsComponent extends Component {
 
     render() {
         return (
-            <View style={{height: '100%'}}>
-                <View style={styles.header}>
-                    <Text style={styles.heading}>Standings</Text>
-                </View>
+            <ScrollView style={{backgroundColor: 'gray'}}>
                 <View style={styles.row}>
-                    <View style={styles.column}>
+                    <View style={styles.nameColumn}>
                         <Text style={{color: 'white', fontSize: 16,}}>TEAM</Text>
                     </View>
                     <View style={styles.column}>
-                        <Text style={{color: 'white', fontSize: 16,}}>RANK</Text>
+                        <Text style={{color: 'white', fontSize: 16,}}>W</Text>
                     </View>
                     <View style={styles.column}>
-                        <Text style={{color: 'white', fontSize: 16,}}>WINS</Text>
+                        <Text style={{color: 'white', fontSize: 16,}}>L</Text>
                     </View>
                     <View style={styles.column}>
-                        <Text style={{color: 'white', fontSize: 16,}}>LOSSES</Text>
+                        <Text style={{color: 'white', fontSize: 16,}}>OTL</Text>
                     </View>
                     <View style={styles.column}>
-                        <Text style={{color: 'white', fontSize: 16,}}>OT LOSSES</Text>
-                    </View>
-                    <View style={styles.column}>
-                        <Text style={{color: 'white', fontSize: 16,}}>POINTS</Text>
+                        <Text style={{color: 'white', fontSize: 16,}}>P</Text>
                     </View>
                 </View>
                 <ListView
                 dataSource = {this.state.todoDataSource}
                 renderRow={this.renderRow}
-                style={{width: '100%'}}
                 />
-            </View>
+            </ScrollView>
         )
     }
 }
@@ -169,26 +166,24 @@ const styles = StyleSheet.create({
     },
 
     column: {
-        flexDirection: 'column',
+        flex: 1,
+        flexDirection: 'row',
         justifyContent: 'center',
-        padding: 16,
+        padding: 7,
         marginBottom: 5,
         marginLeft: 2.5,
         marginRight: 2.5,
         backgroundColor: 'black',
     },
 
-    header: {
-        width: '100%',
-        backgroundColor: 'black',
-        alignItems: 'center',
-        paddingTop: 20,
-        paddingBottom: 20,
+    nameColumn: {
+        flex: 2.5,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        padding: 7,
         marginBottom: 5,
-    },
-
-    heading: {
-        color: 'white',
-        fontSize: 64,
+        marginLeft: 2.5,
+        marginRight: 2.5,
+        backgroundColor: 'black',
     },
 });

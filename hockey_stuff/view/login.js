@@ -55,24 +55,30 @@ export default class Login extends React.Component {
     render() {
         return (
             <View style={styles.main}>
-        <Text style={styles.title}>Welcome</Text>
-        <Text style={styles.title}>Username</Text>
-        <TextInput style={styles.itemInput} onChange={this.handleLoginChange}/>
-        <Text style={styles.title}>Password</Text>
-        <TextInput secureTextEntry={true} style={styles.itemInput} onChange={this.handlePassChange}/>
-        <TouchableHighlight style={styles.button} onPress={this.handleSubmit}>
-        <Text style={styles.title}>Login</Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.button}  onPress={()=>{this.props.navigation.navigate('Signup')}}>
-        <Text style={styles.title}>Sign Up</Text>
-        </TouchableHighlight>
-      </View>
+                <Text style={styles.header}>Welcome to MyNHL!</Text>
+                <Text style={styles.title}>Username</Text>
+                <TextInput style={styles.itemInput} onChange={this.handleLoginChange}/>
+                <Text style={styles.title}>Password</Text>
+                <TextInput secureTextEntry={true} style={styles.itemInput} onChange={this.handlePassChange}/>
+                <TouchableHighlight style={styles.button} onPress={this.handleSubmit}>
+                    <Text style={styles.title}>Login</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={styles.button}  onPress={()=>{this.props.navigation.navigate('Signup')}}>
+                    <Text style={styles.title}>Sign Up</Text>
+                </TouchableHighlight>
+            </View>
         );
     }
 }
 
 
 const styles = StyleSheet.create({
+    header: {
+        fontSize: 64,
+        textAlign: 'center',
+        color: 'white',
+        paddingBottom: '10%'
+    },
     main: {
         flex: 1,
         padding: 30,

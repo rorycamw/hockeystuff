@@ -34,16 +34,20 @@ export default class Dashboard extends React.Component {
     render() {
         return (
             <View style={styles.main}>
-        <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('Standings', {login: this.props.navigation.getParam('login', '')})}}>
-        <Text style={styles.title}>Current Standings</Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('UpcomingGames', {login: this.props.navigation.getParam('login', '')})}}>
-        <Text style={styles.title}>Upcoming Games</Text>
-        </TouchableHighlight>
-        <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('FavTeams', {login: this.props.navigation.getParam('login', '')})}}>
-        <Text style={styles.title} >My Favourite Teams</Text>
-        </TouchableHighlight>
-      </View>
+                <Text style={styles.header}>Welcome to MyNHL {this.state.name}!</Text>
+                <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('Standings', {login: this.props.navigation.getParam('login', '')})}}>
+                    <Text style={styles.title}>Current Standings</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('UpcomingGames', {login: this.props.navigation.getParam('login', '')})}}>
+                    <Text style={styles.title}>Upcoming Games</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('FavTeams', {login: this.props.navigation.getParam('login', '')})}}>
+                    <Text style={styles.title}>My Favourite Teams</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={styles.button} onPress={()=>{this.props.navigation.navigate('Home')}}>
+                    <Text style={styles.title}>Logout</Text>
+                </TouchableHighlight>
+            </View>
         );
     }
 }
@@ -55,6 +59,12 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         backgroundColor: 'black'
+    },
+    header: {
+        fontSize: 64,
+        textAlign: 'center',
+        color: 'white',
+        paddingBottom: '10%'
     },
     title: {
         fontSize: 25,

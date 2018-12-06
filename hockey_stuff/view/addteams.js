@@ -43,7 +43,7 @@ export default class AddTeams extends React.Component {
                     })
                 })
             }}>
-            <Text style={styles.title}>{task.teamtag}||{task.teamname}</Text>
+            <Text style={styles.title}>{task.teamtag} || {task.teamname}</Text>
             </TouchableHighlight>
         )
     }

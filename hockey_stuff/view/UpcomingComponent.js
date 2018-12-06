@@ -4,6 +4,13 @@ import { Text, Image, View, ListView, StyleSheet, TouchableHighlight, Modal } fr
 import { db } from '../service/db.js';
 
 export default class UpcomingComponent extends Component {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerTitle: "Upcoming Games",
+            headerStyle: { backgroundColor: 'gray' },
+            headerTitleStyle: { textAlign: 'center' }
+        };
+    }
 
     constructor(props) {
         super(props);
@@ -154,8 +161,10 @@ export default class UpcomingComponent extends Component {
                     if (parseInt(gameDate[0]) >= parseInt(this.getDate())) {
                     	for (t in this.state.favTeamTags) {
 	                        if (((this.state.favTeamTags.includes(response[i].a)) || (this.state.favTeamTags.includes(response[i].h))) && (teamCount[this.state.favTeamTags[t]] < 3)) {
-	                            gamesSortedByDate.push(response[i]);
-	                            teamCount[this.state.favTeamTags[t]]++;
+                                if (!gamesSortedByDate.includes(response[i])) {
+                                    gamesSortedByDate.push(response[i]);
+                                    teamCount[this.state.favTeamTags[t]]++;
+                                }  
 	                        }
 	                    }
 	                }
@@ -204,13 +213,10 @@ export default class UpcomingComponent extends Component {
     render() {
         return (
             <View style={{height: '100%'}}>
-				<View style={styles.header}>
-					<Text style={styles.heading}>Upcoming Games</Text>
-				</View>
 				<ListView
 				dataSource = {this.state.todoDataSource}
 				renderRow={this.renderRow}
-				style={{width: '100%'}}
+				style={{width: '100%', backgroundColor: 'gray'}}
 				/>
 			</View>
         )
@@ -228,7 +234,7 @@ const styles = StyleSheet.create({
 
     header: {
         width: '100%',
-        backgroundColor: 'black',
+        backgroundColor: 'gray',
         alignItems: 'center',
         paddingTop: 20,
         paddingBottom: 20,
